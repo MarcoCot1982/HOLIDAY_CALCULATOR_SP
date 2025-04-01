@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Calculo vacaciones</title> 
+    <script src="https://apis.google.com/js/api.js"></script>
+</head>
+
+<html lang="en">
+    <style>
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Poppins', sans-serif;
+    background: url('https://preview.redd.it/sy6soxg2omf61.jpg?auto=webp&s=b416c9da9a4c2b3bbf41320e3b21328107843011') no-repeat center center fixed;
+    background-size: cover;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+        h2 {
+            color: #333;
+            text-align: center;
+        }
+
+        .container {
+            background-color: rgb(99, 222, 191);
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 14px;
+            color: #555;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 20px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+
+        button {
+            background-color: rgb(207, 204, 202);
+            color: black;
+            padding: 10px 20px;
+            font-size: 16px;
+            border: 1px solid #070707
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            width: 100%;
+        }
+
+        button:hover {
+            background-color: rgb(207, 204, 202);
+        }
+
+        h3 {
+            text-align: center;
+            color: #333;
+        }
+
+        .result {
+            padding: 10px;
+            background-color: #f1f1f1;
+            margin-top: 20px;
+            border-radius: 4px;
+            border: 1px solid #ddd;
+        }
+
+        .result p {
+            margin: 10px 0;
+            font-size: 14px;
+        }
+
+        .result span {
+            font-weight: bold;
+            color: #333;
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 20px;
+                width: 90%;
+            }
+
+            button {
+                font-size: 14px;
+                padding: 10px;
+            }
+        }
+    </style>
+    <script>
+        function computeQuota() {
+            let hiringDate = document.getElementById('hiringDate').value;
+            let leaveDate = document.getElementById('leaveDate').value;
+            let altaDate = document.getElementById('altaDate').value;
+            let location = document.getElementById('location').value;
+            let extraDays = parseInt(document.getElementById('extraDays').value) || 0;
+
+            google.script.run.withSuccessHandler(displayResult)
+                .calculateHolidayQuota(hiringDate, leaveDate, altaDate, location, extraDays);
+        }
+
+        function displayResult(result) {
+            // Format the coverageEndDate as dd/mm/yyyy
+            const date = new Date(result.coverageEndDate);
+            const formattedDate = date.getDate().toString().padStart(2, '0') + '/' + 
+                                  (date.getMonth() + 1).toString().padStart(2, '0') + '/' + 
+                                  date.getFullYear();
+
+            // Update the quota and coverageEndDate elements
+            document.getElementById('quota').textContent = result.quota + ' days';
+            document.getElementById('coverageEndDate').textContent = formattedDate;
+        }
+    </script>
+</head>
+<body>
+
+    <div class="container">
+        <h2>Calculador cuota vacaciones</h2>
+
+        <label for="hiringDate">Alta en la empresa (solo si año corriente):</label>
+        <input type="date" id="hiringDate">
+
+        <label for="leaveDate">Fecha de calculo:</label>
+        <input type="date" id="leaveDate">
+
+        <label for="altaDate">Primer dia de vacaciones (opcional):</label>
+        <input type="date" id="altaDate">
+
+        <label for="location">Centro:</label>
+        <select id="location">
+            <option value="TFE">TFE</option>
+            <option value="LPA">LPA</option>
+        </select>
+
+        <label for="extraDays">Dias extra (vacaciones antiguas, compensaciones...):</label>
+        <input type="number" id="extraDays" value="0">
+
+        <button onclick="computeQuota()">Calcular</button>
+
+        <h3>Resultados</h3>
+        <div class="result">
+            <p>Cuota: <span id="quota">-</span></p>
+            <p>Ultimo dia libre cubierto: <span id="coverageEndDate">-</span></p>
+        </div>
+          <footer style="font-size: 12px; color: grey; text-align: center; margin-top: 20px;">
+          by Marco Cot, 2025 <br> <br> Aviso: esta no es una aplicación corporativa <br> Usar unicamente por referencia
+          </footer>
+    </div>
+
+</body>
+</html>
