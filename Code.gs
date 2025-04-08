@@ -37,15 +37,17 @@ function calculateHolidayQuota(hiringDate, leaveDate, altaDate, location, extraD
 
 function calculateCoverageEnd(startDate, days, holidays) {
     let date = new Date(startDate);
+    date.setHours(12, 0, 0, 0); // Set time to 12:00 PM to avoid timezone issues
     let daysCounted = 0;
     while (daysCounted < days) {
         let dayOfWeek = date.getDay();
         let formattedDate = date.toISOString().split('T')[0];
         if (dayOfWeek !== 0 && dayOfWeek !== 6 && !holidays.includes(formattedDate)) {
-            daysCounted++; // Count today if it's a working day
-            if (daysCounted === days) break; // If reached desired days, break loop and return current date
+            daysCounted++;
+            if (daysCounted === days) break;
         }
-        date.setDate(date.getDate() + 1); // Move to next day only if still counting
+        date.setDate(date.getDate() + 1);
+        date.setHours(12, 0, 0, 0); // Ensure time remains at 12:00 PM
     }
     return date;
 }
