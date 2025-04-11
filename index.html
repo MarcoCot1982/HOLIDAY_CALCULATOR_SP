@@ -105,15 +105,16 @@ body {
     </style>
     <script>
         function computeQuota() {
-            let hiringDate = document.getElementById('hiringDate').value;
-            let leaveDate = document.getElementById('leaveDate').value;
-            let altaDate = document.getElementById('altaDate').value;
-            let location = document.getElementById('location').value;
-            let extraDays = parseInt(document.getElementById('extraDays').value) || 0;
+    let hiringDate = document.getElementById('hiringDate').value;
+    let leaveDate = document.getElementById('leaveDate').value;
+    let altaDate = document.getElementById('altaDate').value;
+    let location = document.getElementById('location').value;
+    let extraDays = parseInt(document.getElementById('extraDays').value) || 0;
+    let annualQuota = parseInt(document.getElementById('annualQuota').value) || 23;
 
-            google.script.run.withSuccessHandler(displayResult)
-                .calculateHolidayQuota(hiringDate, leaveDate, altaDate, location, extraDays);
-        }
+    google.script.run.withSuccessHandler(displayResult)
+        .calculateHolidayQuota(hiringDate, leaveDate, altaDate, location, extraDays, annualQuota);
+}
 
         function displayResult(result) {
             // Format the coverageEndDate as dd/mm/yyyy
@@ -146,6 +147,16 @@ body {
         <select id="location">
             <option value="TFE">TFE</option>
             <option value="LPA">LPA</option>
+        </select>
+
+        <label for="annualQuota">Cuota anual completa:</label>
+        <select id="annualQuota">
+          <option value="20">20</option>
+          <option value="21">21</option>
+          <option value="22">22</option>
+          <option value="23" selected>23</option>
+          <option value="24">24</option>
+          <option value="25">25</option>
         </select>
 
         <label for="extraDays">Dias extra (vacaciones antiguas, compensaciones...):</label>
