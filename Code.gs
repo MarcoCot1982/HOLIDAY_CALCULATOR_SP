@@ -3,8 +3,8 @@ function doGet() {
     .setTitle('Calculador vacaciones'); 
 }
 
-function calculateHolidayQuota(hiringDate, leaveDate, altaDate, location, extraDays) {
-    const FULL_QUOTA = 23;
+function calculateHolidayQuota(hiringDate, leaveDate, altaDate, location, extraDays, annualQuota) {
+    const FULL_QUOTA = annualQuota || 23; // Default to 23 if not provided
     
     let HOLIDAYS = {
         TFE: JSON.parse(PropertiesService.getScriptProperties().getProperty('holidays_TFE')) || ["2025-01-01", "2025-01-06", "2025-02-03", "2025-03-04", "2025-04-17", "2025-04-18", "2025-05-01", "2025-05-02", "2025-05-30", "2025-08-15", "2025-11-01", "2025-12-06", "2025-12-08", "2025-12-24", "2025-12-25", "2025-12-31"],
@@ -35,6 +35,7 @@ function calculateHolidayQuota(hiringDate, leaveDate, altaDate, location, extraD
     return { quota: quotaString, coverageEndDate: coverageEndDate.toISOString().split('T')[0] };
 }
 
+
 function calculateCoverageEnd(startDate, days, holidays) {
     let date = new Date(startDate);
     date.setHours(12, 0, 0, 0); // Set time to 12:00 PM to avoid timezone issues
@@ -51,6 +52,7 @@ function calculateCoverageEnd(startDate, days, holidays) {
     }
     return date;
 }
+
 
 
 function updateHolidays(password, holidaysTFE, holidaysLPA) {
